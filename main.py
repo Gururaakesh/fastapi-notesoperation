@@ -1,6 +1,6 @@
 from fastapi import FastAPI,Depends
 from database import SessionLocal,engine
-import database
+import database as database
 from sqlalchemy.orm import Session
 from schemas import note
 
