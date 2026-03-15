@@ -42,6 +42,7 @@ def Return_allnotes(db:Session=Depends(get_db)):
 def Add_notes(note:note,db:Session=Depends(get_db)):
     db.add(database.Product(**note.model_dump()))
     db.commit()
+    return {"message":"note created"}
 
 @app.get("/note/{id}")
 def search(id:int,db:Session=Depends(get_db)):
@@ -55,5 +56,6 @@ def update(id:int,name:note,db:Session=Depends(get_db)):
         dbp.title=name.title
         dbp.content=name.content
         db.commit()
+        return "updated"
     else:
         return "No notes"
