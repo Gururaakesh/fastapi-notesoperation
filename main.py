@@ -4,7 +4,6 @@ import database as database
 from sqlalchemy.orm import Session
 from schemas import note
 
-
 app=FastAPI()
 
 database.Base.metadata.create_all(bind=engine)
@@ -23,15 +22,11 @@ product=[ note(id=1,title="gurunote",content="this is my first fastapi project")
 def init_db():
     db=SessionLocal()
     count=db.query(database.Product).count()
-
-
     if count==0:
         for i in product:
             db.add(database.Product(**i.model_dump()))
         db.commit()
 init_db()
-
-
 
 @app.get("/returnnotes")
 def Return_allnotes(db:Session=Depends(get_db)):
@@ -59,3 +54,16 @@ def update(id:int,name:note,db:Session=Depends(get_db)):
         return "updated"
     else:
         return "No notes"
+    
+
+@app.delete("/notes/{note_id}")
+def delete_note(note_id: int, db: Session = Depends(get_db)):
+
+    note = db.query(database.Product).filter(database.Product.id==id).first()
+
+    if not note:
+        return "NO notes found"
+    db.delete(note)
+    db.commit()
+
+    return {"message": "Note deleted"}
